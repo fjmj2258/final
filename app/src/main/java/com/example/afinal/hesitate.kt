@@ -35,6 +35,7 @@ class hesitate : AppCompatActivity() {
         //返回按鈕觸發 -> 跳回主畫面
         btn_hesitate_back.setOnClickListener {
             startActivityForResult(Intent(this, MainActivity::class.java), 1)
+            dbrw.execSQL(" DELETE FROM myTable ")
         }
 
         //取得資料庫實體
@@ -51,6 +52,8 @@ class hesitate : AppCompatActivity() {
     //設定監聽器
     fun setListener() {
         val ed_wanteat = findViewById<EditText>(R.id.ed_wanteat)
+
+
 
         val btn_insert = findViewById<Button>(R.id.btn_insert)
         btn_insert.setOnClickListener {
@@ -126,6 +129,11 @@ class hesitate : AppCompatActivity() {
             val c = dbrw.rawQuery(queryString, null)
             c.moveToFirst() //從第一筆開始輸出
             items.clear() //清空舊資料
+
+            if(c.count < 2) {
+                showToast("請輸入至少兩項食物")
+                return@setOnClickListener
+            }
 
             var all = 0
 
